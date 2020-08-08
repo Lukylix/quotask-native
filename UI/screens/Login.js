@@ -21,7 +21,8 @@ export default function LoginScreen() {
 				rules={{
 					required: "Ce champ est requis.",
 					pattern: {
-						value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+            // RFC 5322 spécification
+						value: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 						message: "Veuillez fournir un mail valide.",
 					},
 				}}
@@ -70,7 +71,7 @@ export default function LoginScreen() {
 					buttonStyle={styles.button}
 					title="Login "
 					type="solid"
-					disabled={errors.password || errors.email || false}
+					disabled={!!(errors.password || errors.email)}
 					raised
 					icon={<Icon name="check" size={20} color="white" />}
 					iconRight
