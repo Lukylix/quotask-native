@@ -7,6 +7,7 @@ import { useForm, Controller } from "react-hook-form";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { View } from "../components/Themed";
+import Brand from "../components/Brand";
 
 export default function LoginScreen() {
 	const { control, handleSubmit, errors } = useForm();
@@ -15,6 +16,7 @@ export default function LoginScreen() {
 
 	return (
 		<LinearGradient colors={["#56B4D3", "#003973"]} style={styles.viewContainer}>
+      <Brand style={{ marginBottom: 20 }}/>
 			<Card
 				title="Connection"
 				containerStyle={{ width: "100%", borderRadius: 5 }}
