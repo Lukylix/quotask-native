@@ -1,7 +1,9 @@
 {
+	"name": "quotaskNative",
+  "displayName": "Quotask",
 	"expo": {
-		"name": "quotaskNative",
-		"slug": "quotaskNative",
+		"name": "QuoTask",
+    "slug": "quoTask-Native",
 		"version": "1.0.0",
 		"orientation": "portrait",
 		"icon": "./assets/images/icon.png",
