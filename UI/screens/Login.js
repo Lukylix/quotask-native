@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 
 import Icon from "react-native-vector-icons/Feather";
 import { Input, Button, Card } from "react-native-elements";
@@ -9,19 +10,31 @@ import { LinearGradient } from "expo-linear-gradient";
 import { View } from "../components/Themed";
 import Brand from "../components/Brand";
 
+
 export default function LoginScreen() {
-	const { control, handleSubmit, errors } = useForm();
-	// TODO send login request
-	const onSubmit = (data) => console.log(data);
+	const { control, handleSubmit, errors, setValue } = useForm();
+
+	const onSubmit = async (data) => {
+			AsyncStorage.setItem("email", JSON.stringify(data.email)).catch((err) => {});
+			// TODO Login here
+	};
+
+	const getEmail = async () => {
+		try {
+			let email = await AsyncStorage.getItem("email");
+			if (email !== null) setValue("email", JSON.parse(email));
+		} catch (err) {}
+	};
+
+	// Run getEmail only once
+	useEffect(() => {
+		getEmail();
+	}, []);
 
 	return (
 		<LinearGradient colors={["#56B4D3", "#003973"]} style={styles.viewContainer}>
-      <Brand style={{ marginBottom: 20 }}/>
-			<Card
-				title="Connection"
-				containerStyle={{ width: "100%", borderRadius: 5 }}
-				titleStyle={{ fontSize: 20 }}
-			>
+			<Brand style={{ marginBottom: 20 }} />
+			<Card title="Connection" containerStyle={{ width: "100%", borderRadius: 5 }} titleStyle={{ fontSize: 20 }}>
 				<Controller
 					name="email"
 					defaultValue=""
