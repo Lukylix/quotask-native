@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 
@@ -10,13 +10,30 @@ import { LinearGradient } from "expo-linear-gradient";
 import { View } from "../components/Themed";
 import Brand from "../components/Brand";
 
+import { login } from "../../libraries/quotask_api";
 
-export default function LoginScreen() {
-	const { control, handleSubmit, errors, setValue } = useForm();
+export default function LoginScreen({ navigation }) {
+	const { control, handleSubmit, errors, setError, setValue } = useForm();
+
+	// We will use isLoading to animate the submit button during login
+	const [isLoading, setIsLoading] = useState(false);
 
 	const onSubmit = async (data) => {
-			AsyncStorage.setItem("email", JSON.stringify(data.email)).catch((err) => {});
-			// TODO Login here
+		setIsLoading(true);
+		// Try to persist email in local storage (sqlite ect..)
+		AsyncStorage.setItem("email", JSON.stringify(data.email)).catch((err) => {});
+		// Login request
+		login(data.email, data.password)
+			.then(({ succes, message, fieldName }) => {
+				if (succes) return navigation.navigate("Home");
+
+				setError(fieldName || "password", {
+					type: "manual",
+					message,
+				});
+			})
+			// 
+			.finally(() => setIsLoading(false));
 	};
 
 	const getEmail = async () => {
@@ -96,6 +113,7 @@ export default function LoginScreen() {
 						icon={<Icon name="check" size={20} color="white" />}
 						iconRight
 						onPress={handleSubmit(onSubmit)}
+						loading={isLoading}
 					/>
 				</View>
 			</Card>
